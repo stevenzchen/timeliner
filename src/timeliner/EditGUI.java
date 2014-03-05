@@ -1,7 +1,15 @@
 package timeliner;
 
+
+
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
@@ -11,17 +19,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import org.joda.time.DateTime;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 public class EditGUI {
 
+	
+	/**
+	 * @author stevenzc
+	 * credit to Joda-Time
+	 */
+	
+	
+	
 	public JFrame frmTimeliner;
 	public JTextField txtName;
 	public JTextField txtTime;
@@ -163,10 +175,48 @@ public class EditGUI {
 		frmTimeliner.getContentPane().add(btnAddEvent);
 		
 		JButton btnEditAnEvent = new JButton("Edit Existing Event\n");
+		btnEditAnEvent.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				boolean foundEvent = false;
+				for(Event e1: timeline.events)
+				{
+					if(txtName.getText().equals(e1.getName()))
+					{
+						foundEvent = true;
+						e1.setDate(new DateTime(Integer.parseInt(txtTime.getText()), 1, 1, 1, 1));
+						e1.setDescription(txtDescription.getText());
+						
+						statusConsole.append("\nEvent \"" + e1.getName() + "\" has been edited. Total number of events in current timeline: " + timeline.events.size() + ".\n");
+						txtName.setText("");
+						txtTime.setText("");
+						txtDescription.setText("");
+					}
+				}
+				if(!foundEvent)
+				{
+					statusConsole.append("\nEvent \"" + txtName.getText() + "\" was not found. The existing events in the timeline are: " + timeline.toString() + ".\n");
+					txtName.setText("");
+					txtTime.setText("");
+					txtDescription.setText("");
+				}
+			}
+		});
 		btnEditAnEvent.setBounds(29, 250, 158, 29);
 		frmTimeliner.getContentPane().add(btnEditAnEvent);
 		
 		JButton btnSave = new JButton("Save Current Timeline");
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					FileOutputStream saveFile = new FileOutputStream(txtTimeline.getText() + ".sav");
+					ObjectOutputStream save = new ObjectOutputStream(saveFile);
+					save.writeObject(timeline);
+					save.close();
+
+					}
+					catch(Exception ef){ }
+			}
+		});
 		btnSave.setBounds(29, 314, 181, 29);
 		frmTimeliner.getContentPane().add(btnSave);
 		
@@ -187,6 +237,21 @@ public class EditGUI {
 		frmTimeliner.getContentPane().add(lblStatusConsole);
 		
 		JButton btnNewButton_1 = new JButton("Load Existing Timeline\n");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					FileInputStream saveFile = new FileInputStream(txtTimeline.getText() + ".sav");
+					ObjectInputStream save = new ObjectInputStream(saveFile);
+					timeline = (Timeline)save.readObject();
+					save.close();
+					statusConsole.append("\nTimeline \"" + txtTimeline.getText() + "\" has been loaded. The existing events in the timeline are: " + timeline.toString() + ".\n");
+
+				}
+				catch(Exception ef){
+					txtTimeline.setText("Timeline save file was not found.");
+				}
+			}
+		});
 		btnNewButton_1.setBounds(29, 343, 181, 29);
 		frmTimeliner.getContentPane().add(btnNewButton_1);
 		
