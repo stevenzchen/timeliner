@@ -1,18 +1,16 @@
 package timeliner;
 
 import java.io.Serializable;
-
 import org.joda.time.DateTime;
 
-public class Event implements Serializable{
+
+public class Event implements Serializable, Comparable<Event>{
 	
 
 	private static final long serialVersionUID = 1L;
 
 
 	String name;
-	
-
 	String description;
 	DateTime date;
 	
@@ -45,5 +43,15 @@ public class Event implements Serializable{
 
 	public void setDate(DateTime date) {
 		this.date = date;
+	}
+	
+	public String toString()
+	{
+		return name;
+	}
+
+	@Override
+	public int compareTo(Event o) {
+		return this.getName().compareTo(o.getName());
 	}
 }
