@@ -52,6 +52,6 @@ public class Event implements Serializable, Comparable<Event>{
 
 	@Override
 	public int compareTo(Event o) {
-		return this.getName().compareTo(o.getName());
+		return this.getDate().compareTo(o.getDate());
 	}
 }

@@ -153,7 +153,7 @@ public class EditGUI {
 				DateTime d = new DateTime(Integer.parseInt(txtTime.getText()), 1, 1, 1, 1);
 				String description = txtDescription.getText();
 				timeline.addEvent(new Event(name, description, d));
-				statusConsole.append("\nEvent " + name + " has been added. Total number of events in current timeline: " + timeline.events.size() + ".\n");
+				statusConsole.append("\nEvent \"" + name + "\" has been added. Total number of events in current timeline: " + timeline.events.size() + ".\n");
 				txtName.setText("");
 				txtTime.setText("");
 				txtDescription.setText("");
@@ -196,6 +196,22 @@ public class EditGUI {
 		frmTimeliner.getContentPane().add(separator_1);
 		
 		JButton btnCreate = new JButton("Create Timeline");
+		btnCreate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(timeline.size() == 0)
+				{
+					statusConsole.append("\nThere are no events in your timeline.\n");
+				}
+				else
+				{
+					timeline.sort();
+					for(Event ev: timeline.events)
+					{
+						statusConsole.append("\n" + ev.date.getYear() + ": " + ev.name + ", " + ev.description + "\n");
+					}
+				}
+			}
+		});
 		btnCreate.setBounds(289, 264, 161, 29);
 		frmTimeliner.getContentPane().add(btnCreate);
 		

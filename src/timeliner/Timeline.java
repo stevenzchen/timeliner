@@ -30,11 +30,18 @@ public class Timeline implements Serializable{
 	public void addEvent(Event e)
 	{
 		events.add(e);
+		sorted = false;
 	}
 	
 	public void sort()
 	{
 		Collections.sort(events);
+		sorted = true;
+	}
+	
+	public int size()
+	{
+		return events.size();
 	}
 	
 	public String toString()
