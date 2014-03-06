@@ -213,6 +213,8 @@ public class EditGUI {
 					save.writeObject(timeline);
 					save.close();
 
+					statusConsole.append("\nTimeline \"" + txtTimeline.getText() + "\" saved successfully." + "\n");
+
 					}
 					catch(Exception ef){ }
 			}
@@ -274,6 +276,8 @@ public class EditGUI {
 					{
 						statusConsole.append("\n" + ev.date.getYear() + ": " + ev.name + ", " + ev.description + "\n");
 					}
+					Artist artist = new Artist(timeline);
+					artist.setVisible(true);
 				}
 			}
 		});
