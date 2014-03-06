@@ -29,7 +29,8 @@ public class EditGUI {
 	
 	/**
 	 * @author stevenzc
-	 * credit to Joda-Time
+	 * developed using the Eclipse IDE and Google WindowBuilder Plug-In
+	 * 
 	 */
 	
 	
