@@ -12,7 +12,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import javax.swing.JButton;
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -21,6 +20,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 import org.joda.time.DateTime;
 
@@ -38,17 +38,24 @@ public class EditGUI {
 	public JFrame frmTimeliner;
 	public JTextField txtName;
 	public JTextField txtTime;
-	public JEditorPane txtDescription;
+	public JTextArea txtDescription;
 	public JTextArea statusConsole;
 	public Timeline timeline = new Timeline("Timeline");
 	private JTextField txtTimeline;
+	private JTextField txtStart;
+	private JTextField txtEnd;
 
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		
-		
+		try {
+			UIManager.setLookAndFeel(
+			        UIManager.getCrossPlatformLookAndFeelClassName());
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		} 
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -102,11 +109,11 @@ public class EditGUI {
 		this.txtTime = txtTime;
 	}
 
-	public JEditorPane getTxtDescription() {
+	public JTextArea getTxtDescription() {
 		return txtDescription;
 	}
 
-	public void setTxtDescription(JEditorPane txtDescription) {
+	public void setTxtDescription(JTextArea txtDescription) {
 		this.txtDescription = txtDescription;
 	}
 
@@ -121,7 +128,7 @@ public class EditGUI {
 		frmTimeliner.getContentPane().setLayout(null);
 		
 		JLabel lblEventEditor = new JLabel("Event Editor");
-		lblEventEditor.setBounds(6, 25, 99, 16);
+		lblEventEditor.setBounds(6, 9, 99, 16);
 		frmTimeliner.getContentPane().add(lblEventEditor);
 		
 		JLabel lblName = new JLabel("Name");
@@ -150,8 +157,10 @@ public class EditGUI {
 		scrollPane.setBounds(90, 109, 134, 90);
 		frmTimeliner.getContentPane().add(scrollPane);
 		
-		txtDescription = new JEditorPane();
-		scrollPane.setColumnHeaderView(txtDescription);
+		txtDescription = new JTextArea();
+		txtDescription.setLineWrap(true); 
+		txtDescription.setWrapStyleWord(true); 
+		scrollPane.setViewportView((txtDescription));
 		
 		JSeparator separator = new JSeparator();
 		separator.setForeground(Color.BLACK);
@@ -202,13 +211,14 @@ public class EditGUI {
 				}
 			}
 		});
-		btnEditAnEvent.setBounds(29, 250, 158, 29);
+		btnEditAnEvent.setBounds(29, 245, 158, 29);
 		frmTimeliner.getContentPane().add(btnEditAnEvent);
 		
 		JButton btnSave = new JButton("Save Current Timeline");
 		btnSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
+					timeline.setName(txtTimeline.getText());
 					FileOutputStream saveFile = new FileOutputStream(txtTimeline.getText() + ".sav");
 					ObjectOutputStream save = new ObjectOutputStream(saveFile);
 					save.writeObject(timeline);
@@ -225,7 +235,7 @@ public class EditGUI {
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane_1.setBounds(260, 37, 211, 176);
+		scrollPane_1.setBounds(260, 37, 211, 227);
 		frmTimeliner.getContentPane().add(scrollPane_1);
 		
 		statusConsole = new JTextArea();
@@ -246,12 +256,13 @@ public class EditGUI {
 					FileInputStream saveFile = new FileInputStream(txtTimeline.getText() + ".sav");
 					ObjectInputStream save = new ObjectInputStream(saveFile);
 					timeline = (Timeline)save.readObject();
+					timeline.setName(txtTimeline.getText());
 					save.close();
 					statusConsole.append("\nTimeline \"" + txtTimeline.getText() + "\" has been loaded. The existing events in the timeline are: " + timeline.toString() + ".\n");
 
 				}
 				catch(Exception ef){
-					txtTimeline.setText("Timeline save file was not found.");
+					statusConsole.append("\nTimeline save file was not found.\n");
 				}
 			}
 		});
@@ -260,29 +271,38 @@ public class EditGUI {
 		
 		JSeparator separator_1 = new JSeparator();
 		separator_1.setForeground(Color.BLACK);
-		separator_1.setBounds(6, 281, 227, 12);
+		separator_1.setBounds(6, 276, 227, 12);
 		frmTimeliner.getContentPane().add(separator_1);
 		
 		JButton btnCreate = new JButton("Create Timeline");
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				timeline.sort();
 				if(timeline.size() == 0)
 				{
 					statusConsole.append("\nThere are no events in your timeline.\n");
 				}
+				else if(!(txtStart.getText().equals("") && txtEnd.getText().equals("")) && (Integer.parseInt(txtStart.getText())>timeline.events.get(0).getDate().getYear() || Integer.parseInt(txtEnd.getText()) < timeline.events.get(timeline.size() - 1).getDate().getYear()))
+				{
+					statusConsole.append("\nThe bounds that you specified for the timeline do not work with the events you entered.\n");
+				}
 				else
 				{
-					timeline.sort();
-					for(Event ev: timeline.events)
-					{
-						statusConsole.append("\n" + ev.date.getYear() + ": " + ev.name + ", " + ev.description + "\n");
+					try{
+						timeline.setStart(new DateTime(Integer.parseInt(txtStart.getText()), 1, 1, 1, 1));
+					timeline.setEnd(new DateTime(Integer.parseInt(txtEnd.getText()), 1, 1, 1, 1));
 					}
+					catch(Exception ec)
+					{
+						
+					}
+					
 					Artist artist = new Artist(timeline);
 					artist.setVisible(true);
 				}
 			}
 		});
-		btnCreate.setBounds(289, 264, 161, 29);
+		btnCreate.setBounds(290, 343, 161, 29);
 		frmTimeliner.getContentPane().add(btnCreate);
 		
 		txtTimeline = new JTextField();
@@ -290,5 +310,28 @@ public class EditGUI {
 		txtTimeline.setBounds(53, 287, 134, 28);
 		frmTimeliner.getContentPane().add(txtTimeline);
 		txtTimeline.setColumns(10);
+		
+		JLabel lblTimelineStartYear = new JLabel("Timeline Start Year");
+		lblTimelineStartYear.setBounds(260, 293, 134, 16);
+		frmTimeliner.getContentPane().add(lblTimelineStartYear);
+		
+		JLabel lblTimelineEndYear = new JLabel("Timeline End Year");
+		lblTimelineEndYear.setBounds(260, 319, 134, 16);
+		frmTimeliner.getContentPane().add(lblTimelineEndYear);
+		
+		txtStart = new JTextField();
+		txtStart.setBounds(393, 287, 78, 28);
+		frmTimeliner.getContentPane().add(txtStart);
+		txtStart.setColumns(10);
+		
+		txtEnd = new JTextField();
+		txtEnd.setBounds(393, 313, 78, 28);
+		frmTimeliner.getContentPane().add(txtEnd);
+		txtEnd.setColumns(10);
+		
+		JSeparator separator_2 = new JSeparator();
+		separator_2.setForeground(Color.BLACK);
+		separator_2.setBounds(248, 276, 246, 12);
+		frmTimeliner.getContentPane().add(separator_2);
 	}
 }
