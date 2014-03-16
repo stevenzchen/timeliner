@@ -35,7 +35,7 @@ public class Artist extends JFrame {
 		t = timeline;
 		setTitle(timeline.name);
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setBounds(100, 100, 400, 639);
+		setBounds(100, 100, 501, 640);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -62,15 +62,15 @@ public class Artist extends JFrame {
 				ArrayList<Event> e = t.getEventsInYear(i);
 				if(e.size() == 0)
 				{
-					JLabel l = new JLabel(" ");
-					JLabel r = new JLabel(" ");
+					JLabel l = new JLabel("-");
+					JLabel r = new JLabel("-");
 					if(i % 5 == 0 && left)
 					{
-						l.setText(Integer.toString(i));
+						l.setText("(" + Integer.toString(i) + ")-");
 					}
 					else if(i % 5 == 0 && !left)
 					{
-						r.setText(Integer.toString(i));
+						r.setText("-(" + Integer.toString(i) + ")");
 					}
 					l.setAlignmentX(RIGHT_ALIGNMENT);
 					r.setAlignmentX(LEFT_ALIGNMENT);
@@ -82,12 +82,12 @@ public class Artist extends JFrame {
 					for(int j = 0; j < e.size(); j++)
 					{
 						JLabel content = new JLabel(e.get(j).name);
-						JLabel filler = new JLabel(" ");
+						JLabel filler = new JLabel("-");
 						if(left)
 						{
 							content.setAlignmentX(RIGHT_ALIGNMENT);
 							filler.setAlignmentX(LEFT_ALIGNMENT);
-							content.setText(content.getText() + "- " + i);
+							content.setText(content.getText() + "  - " + i + "-----");
 							content.setToolTipText(e.get(j).description);
 							
 							leftpanel.add(content);
@@ -99,7 +99,7 @@ public class Artist extends JFrame {
 						{
 							content.setAlignmentX(LEFT_ALIGNMENT);
 							filler.setAlignmentX(RIGHT_ALIGNMENT);
-							content.setText(i + " -" + content.getText());
+							content.setText("-----" + i + " -  " + content.getText());
 							content.setToolTipText(e.get(j).description);
 							
 							rightpanel.add(content);
@@ -116,7 +116,7 @@ public class Artist extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(panel);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPane.setBounds(6, 6, 388, 566);
+		scrollPane.setBounds(6, 6, 489, 564);
 		contentPane.add(scrollPane);
 		
 		JButton btnImage = new JButton("Save as Image");
@@ -142,7 +142,7 @@ public class Artist extends JFrame {
 				}
 			}
 		});
-		btnImage.setBounds(6, 582, 117, 29);
+		btnImage.setBounds(6, 582, 140, 29);
 		contentPane.add(btnImage);
 		
 		JButton btnClose = new JButton("Close Window");
@@ -151,7 +151,7 @@ public class Artist extends JFrame {
 				dispose();
 			}
 		});
-		btnClose.setBounds(277, 582, 117, 29);
+		btnClose.setBounds(355, 582, 140, 29);
 		contentPane.add(btnClose);
 		
 		repaint();
