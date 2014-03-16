@@ -211,7 +211,7 @@ public class EditGUI {
 				}
 			}
 		});
-		btnEditAnEvent.setBounds(29, 245, 158, 19);
+		btnEditAnEvent.setBounds(29, 245, 158, 22);
 		frmTimeliner.getContentPane().add(btnEditAnEvent);
 		
 		JButton btnSave = new JButton("Save Current Timeline");
@@ -230,7 +230,7 @@ public class EditGUI {
 					catch(Exception ef){ }
 			}
 		});
-		btnSave.setBounds(29, 316, 180, 25);
+		btnSave.setBounds(29, 320, 180, 22);
 		frmTimeliner.getContentPane().add(btnSave);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
@@ -266,7 +266,7 @@ public class EditGUI {
 				}
 			}
 		});
-		btnNewButton_1.setBounds(29, 349, 180, 23);
+		btnNewButton_1.setBounds(29, 349, 180, 22);
 		frmTimeliner.getContentPane().add(btnNewButton_1);
 		
 		JSeparator separator_1 = new JSeparator();
@@ -302,7 +302,7 @@ public class EditGUI {
 				}
 			}
 		});
-		btnCreate.setBounds(290, 343, 161, 29);
+		btnCreate.setBounds(290, 346, 161, 22);
 		frmTimeliner.getContentPane().add(btnCreate);
 		
 		txtTimeline = new JTextField();

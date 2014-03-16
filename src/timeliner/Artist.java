@@ -54,7 +54,7 @@ public class Artist extends JFrame {
 		panel.setEnabled(false);
 		panel.setResizeWeight(.5d);
 
-
+		//DRAWING THE TIMELINE: ALGORITHMIC THINKING EXAMPLE
 
 			boolean left = true;
 			for(int i = t.start.getYear(); i <= t.end.getYear(); i++)
@@ -89,10 +89,8 @@ public class Artist extends JFrame {
 							filler.setAlignmentX(LEFT_ALIGNMENT);
 							content.setText(content.getText() + "  - " + i + "-----");
 							content.setToolTipText(e.get(j).description);
-							
 							leftpanel.add(content);
 							rightpanel.add(filler);
-							
 							left = false;
 						}
 						else
@@ -101,17 +99,15 @@ public class Artist extends JFrame {
 							filler.setAlignmentX(RIGHT_ALIGNMENT);
 							content.setText("-----" + i + " -  " + content.getText());
 							content.setToolTipText(e.get(j).description);
-							
 							rightpanel.add(content);
 							leftpanel.add(filler);
-							
 							left = true;
 						}
 					}
 				}
 			}
 
-
+		//END OF DRAWING TIMELINE: ALGORITHMIC THINKING EXAMPLE
 	
 		JScrollPane scrollPane = new JScrollPane(panel);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
