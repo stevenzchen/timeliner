@@ -290,7 +290,7 @@ public class EditGUI {
 				{
 					try{
 						timeline.setStart(new DateTime(Integer.parseInt(txtStart.getText()), 1, 1, 1, 1));
-					timeline.setEnd(new DateTime(Integer.parseInt(txtEnd.getText()), 1, 1, 1, 1));
+						timeline.setEnd(new DateTime(Integer.parseInt(txtEnd.getText()), 1, 1, 1, 1));
 					}
 					catch(Exception ec)
 					{

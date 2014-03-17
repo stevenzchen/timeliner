@@ -18,6 +18,8 @@ import javax.swing.JSplitPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
+import org.joda.time.DateTime;
+
 public class Artist extends JFrame {
 
 
@@ -35,7 +37,7 @@ public class Artist extends JFrame {
 		t = timeline;
 		setTitle(timeline.name);
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setBounds(100, 100, 501, 640);
+		setBounds(100, 100, 550, 700);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -57,13 +59,28 @@ public class Artist extends JFrame {
 		//DRAWING THE TIMELINE: ALGORITHMIC THINKING EXAMPLE
 
 			boolean left = true;
-			for(int i = t.start.getYear(); i <= t.end.getYear(); i++)
+			
+			DateTime start = new DateTime();
+			DateTime end = new DateTime();
+			
+			if(t.start != null && t.end != null)
 			{
-				ArrayList<Event> e = t.getEventsInYear(i);
+				start = t.start;
+				end = t.end;
+			}
+			else
+			{
+				start = t.events.get(0).date;
+				end = t.events.get(t.events.size()-1).date;
+			}
+			
+			for(int i = start.getYear(); i <= end.getYear(); i++)	//cycling through all years in timeline
+			{
+				ArrayList<Event> e = t.getEventsInYear(i);	//finding all events with given year
 				if(e.size() == 0)
 				{
 					JLabel l = new JLabel("-");
-					JLabel r = new JLabel("-");
+					JLabel r = new JLabel("-");	//placeholders
 					if(i % 5 == 0 && left)
 					{
 						l.setText("(" + Integer.toString(i) + ")-");
@@ -79,15 +96,15 @@ public class Artist extends JFrame {
 				}
 				else
 				{
-					for(int j = 0; j < e.size(); j++)
+					for(int j = 0; j < e.size(); j++)	//cycling through all events in year
 					{
 						JLabel content = new JLabel(e.get(j).name);
 						JLabel filler = new JLabel("-");
-						if(left)
+						if(left)	//depending on left/right flag, put content/filler on left/right
 						{
 							content.setAlignmentX(RIGHT_ALIGNMENT);
 							filler.setAlignmentX(LEFT_ALIGNMENT);
-							content.setText(content.getText() + "  - " + i + "-----");
+							content.setText(content.getText() + "-" + i + "------");
 							content.setToolTipText(e.get(j).description);
 							leftpanel.add(content);
 							rightpanel.add(filler);
@@ -97,7 +114,7 @@ public class Artist extends JFrame {
 						{
 							content.setAlignmentX(LEFT_ALIGNMENT);
 							filler.setAlignmentX(RIGHT_ALIGNMENT);
-							content.setText("-----" + i + " -  " + content.getText());
+							content.setText("------" + i + "-" + content.getText());
 							content.setToolTipText(e.get(j).description);
 							rightpanel.add(content);
 							leftpanel.add(filler);
@@ -112,7 +129,7 @@ public class Artist extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(panel);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-		scrollPane.setBounds(6, 6, 489, 564);
+		scrollPane.setBounds(6, 6, 538, 628);
 		contentPane.add(scrollPane);
 		
 		JButton btnImage = new JButton("Save as Image");
@@ -138,7 +155,7 @@ public class Artist extends JFrame {
 				}
 			}
 		});
-		btnImage.setBounds(6, 582, 140, 29);
+		btnImage.setBounds(6, 643, 140, 29);
 		contentPane.add(btnImage);
 		
 		JButton btnClose = new JButton("Close Window");
@@ -147,7 +164,7 @@ public class Artist extends JFrame {
 				dispose();
 			}
 		});
-		btnClose.setBounds(355, 582, 140, 29);
+		btnClose.setBounds(404, 643, 140, 29);
 		contentPane.add(btnClose);
 		
 		repaint();

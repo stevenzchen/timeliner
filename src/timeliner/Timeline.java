@@ -44,6 +44,12 @@ public class Timeline implements Serializable{
 		return events.size();
 	}
 	
+	
+	/**
+	 * Gets the events that are present in the timeline with that year as its date.
+	 * @param year the year in which to look for events
+	 * @return a list of all events within that year
+	 */
 	public ArrayList<Event> getEventsInYear(int year)
 	{
 		if(events.size() == 0)
