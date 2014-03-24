@@ -14,6 +14,12 @@ public class Event implements Serializable, Comparable<Event>{
 	String description;
 	DateTime date;
 	
+	/**
+	 * Creates an event with given parameters.
+	 * @param n 	The name of the event.
+	 * @param desc 	The description for the event.
+	 * @param d 	The date on which the event occurred.
+	 */
 	public Event(String n, String desc, DateTime d)
 	{
 		name = n;
@@ -49,7 +55,8 @@ public class Event implements Serializable, Comparable<Event>{
 	{
 		return name;
 	}
-
+	
+	
 	@Override
 	public int compareTo(Event o) {
 		return this.getDate().compareTo(o.getDate());
